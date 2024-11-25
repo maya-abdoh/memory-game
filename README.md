@@ -27,6 +27,11 @@ A simple memory game built with **React**. The game shuffles cards and allows pl
 
 ---
 
+## 🎥 Demo
+Check out the live demo here: [Memory Game](https://maya-abdoh.github.io/memory-game)
+
+![لقطة شاشة 2024-11-25 125551](https://github.com/user-attachments/assets/56059908-aa76-4019-b930-ed099699be13)
+
 ## 📧 Contact
 For any feedback or suggestions, feel free to reach out:
 - **GitHub**: [maya-abdoh](https://github.com/maya-abdoh)
