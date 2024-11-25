@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Header from "./Components/Header";
 import Grid from "./Components/Grid";
-import "./App.css";
+import './App.css';
+
 import cardImages from "./Components/Images";
 
 const App = () => {
@@ -10,17 +11,23 @@ const App = () => {
   const [choiceOne, setChoiceOne] = useState(null);
   const [choiceTwo, setChoiceTwo] = useState(null);
   const [disabled, setDisabled] = useState(false);
-  const [win, setWin] = useState(false); 
-  
+  const [status, setStatus] = useState(""); 
+
   const shuffleCards = () => {
     const shuffledCards = [...cardImages, ...cardImages]
       .sort(() => Math.random() - 0.5)
-      .map((card) => ({ ...card, id: Math.random() })); 
+      .map((card) => ({ ...card, id: Math.random(), flipped: true })); 
     setCards(shuffledCards);
     setChoiceOne(null);
     setChoiceTwo(null);
     setTurns(0);
-    setWin(false); 
+    setStatus(""); 
+
+    setTimeout(() => {
+      setCards((prevCards) =>
+        prevCards.map((card) => ({ ...card, flipped: false }))
+      );
+    }, 3000);
   };
 
   const handleChoice = (card) => {
@@ -29,34 +36,34 @@ const App = () => {
 
   useEffect(() => {
     if (choiceOne && choiceTwo) {
-      setDisabled(true); 
+      setDisabled(true);
       if (choiceOne.src === choiceTwo.src) {
         setCards((prevCards) =>
           prevCards.map((card) =>
             card.src === choiceOne.src ? { ...card, matched: true } : card
           )
         );
-        resetTurn(false);
+        resetTurn();
       } else {
-        setTimeout(() => resetTurn(true), 1000); 
+        setTimeout(() => resetTurn(), 1000);
       }
     }
   }, [choiceOne, choiceTwo]);
 
-  const resetTurn = (incrementTurns) => {
+  const resetTurn = () => {
     setChoiceOne(null);
     setChoiceTwo(null);
-    if (incrementTurns) {
-      setTurns((prevTurns) => {
-        const newTurns = prevTurns + 1;
-        if (newTurns >= 15) {
-          setWin(true); 
-        }
-        return newTurns;
-      });
-    }
+    setTurns((prevTurns) => prevTurns + 1);
     setDisabled(false);
   };
+
+  useEffect(() => {
+    if (cards.every((card) => card.matched)) {
+      setStatus("You Win! 🎉");
+    } else if (turns >= 15) {
+      setStatus("You Lose! 😢");
+    }
+  }, [cards, turns]);
 
   useEffect(() => {
     shuffleCards();
@@ -65,12 +72,8 @@ const App = () => {
   return (
     <div className="App">
       <Header turns={turns} onShuffle={shuffleCards} />
-      {win ? (
-        <div className="win-message">
-          <h2>Congratulations! You Win 🎉</h2>
-          <button onClick={shuffleCards}>Play Again</button>
-        </div>
-      ) : (
+      {status && <h2 className="status">{status}</h2>}
+      {!status && (
         <Grid
           cards={cards}
           choiceOne={choiceOne}
