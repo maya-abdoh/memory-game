@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Header from "./Components/Header";
 import Grid from "./Components/Grid";
 import './App.css';
-
 import cardImages from "./Components/Images";
 
 const App = () => {
@@ -11,17 +10,21 @@ const App = () => {
   const [choiceOne, setChoiceOne] = useState(null);
   const [choiceTwo, setChoiceTwo] = useState(null);
   const [disabled, setDisabled] = useState(false);
-  const [status, setStatus] = useState(""); 
+  const [status, setStatus] = useState("");
+  const [time, setTime] = useState(0); 
+  const [gameOver, setGameOver] = useState(false); 
 
   const shuffleCards = () => {
     const shuffledCards = [...cardImages, ...cardImages]
       .sort(() => Math.random() - 0.5)
-      .map((card) => ({ ...card, id: Math.random(), flipped: true })); 
+      .map((card) => ({ ...card, id: Math.random(), flipped: true }));
     setCards(shuffledCards);
     setChoiceOne(null);
     setChoiceTwo(null);
     setTurns(0);
-    setStatus(""); 
+    setStatus("");
+    setTime(0);
+    setGameOver(false); 
 
     setTimeout(() => {
       setCards((prevCards) =>
@@ -31,7 +34,9 @@ const App = () => {
   };
 
   const handleChoice = (card) => {
-    choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
+    if (!disabled) {
+      choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
+    }
   };
 
   useEffect(() => {
@@ -60,18 +65,39 @@ const App = () => {
   useEffect(() => {
     if (cards.every((card) => card.matched)) {
       setStatus("You Win! 🎉");
+      setGameOver(true);
     } else if (turns >= 15) {
       setStatus("You Lose! 😢");
+      setGameOver(true);
     }
   }, [cards, turns]);
+
+  useEffect(() => {
+    if (!gameOver) {
+      const timer = setInterval(() => {
+        setTime((prevTime) => prevTime + 1);
+      }, 1000);
+
+      return () => clearInterval(timer); 
+    }
+  }, [gameOver]);
 
   useEffect(() => {
     shuffleCards();
   }, []);
 
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
+  };
+
   return (
     <div className="App">
       <Header turns={turns} onShuffle={shuffleCards} />
+      <div className="timer">Time: {formatTime(time)}</div>
       {status && <h2 className="status">{status}</h2>}
       {!status && (
         <Grid
