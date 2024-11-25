@@ -2,20 +2,10 @@ import React from "react";
 
 function Header({ turns, onShuffle }) {
   return (
-    <header style={{ textAlign: "center", margin: "20px 0" }}>
-      <h1>Memory Game</h1>
-      <p>Turns: {turns}</p>
-      <button
-        onClick={onShuffle}
-        style={{
-          padding: "10px 20px",
-          backgroundColor: "#4caf50",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-      >
+    <header className="header">
+      <h1 className="header-title">Memory Game</h1>
+      <p className="header-turns">Turns: {turns}</p>
+      <button className="new-game-btn" onClick={onShuffle}>
         New Game
       </button>
     </header>

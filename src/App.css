@@ -115,3 +115,30 @@ button:hover {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     cursor: default;
 }
+.header {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.header-title {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.header-turns {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.new-game-btn {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.new-game-btn:hover {
+  background-color: #45a049;
+}
