@@ -11,9 +11,7 @@ const Card = ({ card, flipped, disabled, handleChoice }) => {
   return (
     <div className="card">
       <div className={flipped ? "flipped" : ""}>
-        {/* Front side of the card (image from cardImages) */}
         <img src={card.src} alt="card front" className="front" />
-        {/* Back side of the card (EducativeIcon) */}
         <img
           src={Educative}
           alt="card back"
